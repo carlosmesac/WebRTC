@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head>
+    <title>
+        WebRTC App
+    </title>
+</head>
+
+<body>
+    <h1>WebRTC App</h1>
+    <!--Contenedor para escribir el numero de la sala-->
+    <div id="selectRoom">
+        <label>Escribe el número de la sala</label>
+        <input type="text" id="roomNumber" />
+        <button id="goRoom">Go</button>
+    </div>
+    <!--Contenedor de las transmisiones de vídeo-->
+    <div id="consultingRoom" style="display: none;">
+        <video id="localVideo" autoplay></video>
+        <video id="remoteVideo" autoplay></video>
+    </div>
+
+    <!--Librerias de JS necesarias-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+
+</body>
