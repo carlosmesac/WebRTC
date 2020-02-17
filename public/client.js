@@ -142,7 +142,7 @@ function onIceCandidate(event) {
         console.log('sending ice Candidate');
         socket.emit('candidate', {
             type: 'candidate',
-            lable: event.candidate.sdpMLineIndex,
+            label: event.candidate.sdpMLineIndex,
             id: event.candidate.sdpMid,
             candidate: event.candidate.candidate,
             room: roomNumber
