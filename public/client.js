@@ -75,7 +75,18 @@ socket.on('ready', function() {
         rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
 
         //prepara el Offer
-        rtcPeerConnection.createOffer(setLocalAndOffer, function(e) { console.log(e) });
+        rtcPeerConnection.createOffer()
+            .then(sessionDescription => {
+                rtcPeerConnection.setLocalDescription(sessionDescription);
+                socket.emit('offer', {
+                    type: 'offer',
+                    sdp: sessionDescription,
+                    room: roomNumber
+                });
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 });
 
@@ -92,7 +103,18 @@ socket.on('offer', function(event) {
         rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream); //almacena el 'Offer' como descripcion remota
         rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
         //prepara el 'Answer'
-        rtcPeerConnection.createAnswer(setLocalAndAnswer, function(e) { console.log(e) });
+        rtcPeerConnection.createAnswer()
+            .then(sessionDescription => {
+                rtcPeerConnection.setLocalDescription(sessionDescription);
+                socket.emit('answer', {
+                    type: 'answer',
+                    sdp: sessionDescription,
+                    room: roomNumber
+                });
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 });
 
@@ -131,24 +153,4 @@ function onIceCandidate(event) {
             room: roomNumber
         })
     }
-}
-
-//almacena el 'Offer' y envia mensaje al servidor
-function setLocalAndOffer(sessionDescription) {
-    rtcPeerConnection.setLocalDescription(sessionDescription);
-    socket.emit('offer', {
-        type: 'offer',
-        sdp: sessionDescription,
-        room: roomNumber
-    });
-}
-
-//almacena el 'Answer' y envia mensaje al servidor
-function setLocalAndAnswer(sessionDescription) {
-    rtcPeerConnection.setLocalDescription(sessionDescription);
-    socket.emit('answer', {
-        type: 'answer',
-        sdp: sessionDescription,
-        room: roomNumber
-    });
 }
