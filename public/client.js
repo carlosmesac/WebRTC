@@ -14,7 +14,7 @@ var rtcPeerConnection;
 //Servidor STUN
 var iceServers = {
     'iceServers': [
-        { 'urls': 'stun:stun.service.mozilla.com' },
+        { 'urls': 'stun:stun.services.mozilla.com' },
         { 'urls': 'stun:stun.l.google.com:19302' }
     ]
 }
@@ -31,8 +31,8 @@ btnGoRoom.onclick = function() {
     } else {
         roomNumber = inputRoomNumber.value; //obtenemos el valor del elemento
         socket.emit('create or join', roomNumber); //enviamos el mensaje al servidor
-        divSelectRoom.style = "display:none"; //ocultamos el input de la sala
-        divConsultingRoom = "display:block"; //mostramos la conferencia
+        divSelectRoom.style = "display:none;"; //ocultamos el input de la sala
+        divConsultingRoom = "display:block;"; //mostramos la conferencia
     }
 }
 
@@ -42,7 +42,7 @@ socket.on('created', function(room) {
     //se obtienen los dispositivos multimedia definidos en los contraints
     navigator.mediaDevices.getUserMedia(streamConstraints).then(function(stream) {
         localStream = stream; //define la transmision local como una variable
-        localVideo.src = URL.createObjectURL(stream); //muestra la transmision al usuario
+        localVideo.srcObject = stream; //muestra la transmision al usuario
         isCaller = true; // define al usuario como Caller
 
     }).catch(function(err) {
@@ -55,7 +55,7 @@ socket.on('joined', function(room) {
     //se obtienen los dispositivos multimedia definidos en los contraints
     navigator.mediaDevices.getUserMedia(streamConstraints).then(function(stream) {
         localStream = stream; //define la transmision local como una variable
-        localVideo.src = URL.createObjectURL(stream); //muestra la transmision al usuario
+        localVideo.srcObject = stream; //muestra la transmision al usuario
         socket.emit('ready', roomNumber); //envía un mensaje al servidor
     }).catch(function(err) {
         console.log('An error ocurred when accessing media devices');
@@ -69,9 +69,11 @@ socket.on('ready', function() {
         rtcPeerConnection = new RTCPeerConnection(iceServers);
         //añade los listeners a los objetos creados
         rtcPeerConnection.onicecandidate = onIceCandidate;
-        rtcPeerConnection.onaddstream = onAddStream;
+        rtcPeerConnection.ontrack = onAddStream;
         //añade la transmisión local al objeto
-        rtcPeerConnection.addStream(localStream);
+        rtcPeerConnection.addTrack(localStream.getTracks()[0], localStream);
+        rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream);
+
         //prepara el Offer
         rtcPeerConnection.createOffer(setLocalAndOffer, function(e) { console.log(e) });
     }
