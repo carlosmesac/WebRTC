@@ -61,6 +61,16 @@ socket.on('joined', function(room) {
         console.log('An error ocurred when accessing media devices', err);
     });
 });
+//cuando el servidor emite un candidate
+socket.on('candidate', function(event) {
+    //crea el objeto candidate
+    var candidate = new RTCIceCandidate({
+        sdpMLineIndex: event.label,
+        candidate: event.candidate
+    });
+    //almacena le candidate
+    rtcPeerConnection.addIceCandidate(candidate);
+});
 
 //cuando el servidor emite un 'ready'
 socket.on('ready', function() {
@@ -124,23 +134,8 @@ socket.on('answer', function(event) {
     rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
 });
 
-//cuando el servidor emite un candidate
-socket.on('candidate', function(event) {
-    //crea el objeto candidate
-    var candidate = new RTCIceCandidate({
-        sdpMLineIndex: event.label,
-        candidate: event.candidate
-    });
-    //almacena le candidate
-    rtcPeerConnection.addIceCandidate(candidate);
-});
 
-//Cuando un usuario recibe el audio o vídeo del otro usuario
-function onAddStream(event) {
-    remoteVideo.srcObject = event.stream[0];
-    remoteStream = event.stream;
 
-}
 //enviar candidate al servidor
 function onIceCandidate(event) {
     if (event.candidate) {
@@ -153,4 +148,10 @@ function onIceCandidate(event) {
             room: roomNumber
         })
     }
+}
+//Cuando un usuario recibe el audio o vídeo del otro usuario
+function onAddStream(event) {
+    remoteVideo.srcObject = event.streams[0];
+    remoteStream = event.stream;
+
 }
