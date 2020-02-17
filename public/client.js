@@ -46,7 +46,7 @@ socket.on('created', function(room) {
         isCaller = true; // define al usuario como Caller
 
     }).catch(function(err) {
-        console.log('An error ocurred when accessing media devices');
+        console.log('An error ocurred when accessing media devices', err);
     });
 });
 
@@ -58,7 +58,7 @@ socket.on('joined', function(room) {
         localVideo.srcObject = stream; //muestra la transmision al usuario
         socket.emit('ready', roomNumber); //envía un mensaje al servidor
     }).catch(function(err) {
-        console.log('An error ocurred when accessing media devices');
+        console.log('An error ocurred when accessing media devices', err);
     });
 });
 
@@ -105,7 +105,7 @@ socket.on('answer', function(event) {
 //cuando el servidor emite un candidate
 socket.on('candidate', function(event) {
     //crea el objeto candidate
-    var candidate = RTCIceCandidate({
+    var candidate = new RTCIceCandidate({
         sdpMLineIndex: event.label,
         candidate: event.candidate
     });
