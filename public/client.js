@@ -86,10 +86,10 @@ socket.on('offer', function(event) {
         rtcPeerConnection = new RTCPeerConnection(iceServers);
         //añade los listeners a los objetos creados
         rtcPeerConnection.onicecandidate = onIceCandidate;
-        rtcPeerConnection.onaddstream = onAddStream;
+        rtcPeerConnection.ontrack = onAddStream;
         //añade la transmisión local al objeto
-        rtcPeerConnection.addStream(localStream);
-        //almacena el 'Offer' como descripcion remota
+        rtcPeerConnection.addTrack(localStream.getTracks()[0], localStream);
+        rtcPeerConnection.addTrack(localStream.getTracks()[1], localStream); //almacena el 'Offer' como descripcion remota
         rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
         //prepara el 'Answer'
         rtcPeerConnection.createAnswer(setLocalAndAnswer, function(e) { console.log(e) });
@@ -115,7 +115,7 @@ socket.on('candidate', function(event) {
 
 //Cuando un usuario recibe el audio o vídeo del otro usuario
 function onAddStream(event) {
-    remoteVideo.src = URLcreateObjectURL(event.stream);
+    remoteVideo.srcObject = event.stream[0];
     remoteStream = event.stream;
 
 }
