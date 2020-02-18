@@ -196,4 +196,4 @@ Una vez este todo list, desde el cmd y estando en la carpeta raíz usamos:
 node server.js
 ```
 
-y en los buscadores accedemps a [aquí](http://localhost:3000/)
+y en los buscadores accedemos a [aquí](http://localhost:3000/)
