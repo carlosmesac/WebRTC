@@ -1,11 +1,18 @@
 //librerias requeridas
 const express = require('express');
 const app = express();
-var http = require('http').Server(app);
+var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 //host estatico con express
 app.use(express.static('public'));
+
+// Provide access to node_modules folder from the client-side
+app.use('/scripts', express.static(`${__dirname}/node_modules/`));
+
+// Redirect all traffic to index.html
+app.use((req, res) => res.sendFile(`${__dirname}/public/index.html`));
+
 
 //manejadores de señaliazcion
 io.on('connection', function(socket) {

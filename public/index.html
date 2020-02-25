@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>
-        WebRTC App
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC</title>
 </head>
 
 <body>
@@ -16,12 +17,16 @@
     </div>
     <!--Contenedor de las transmisiones de vídeo-->
     <div id="consultingRoom" style="display: none;">
-        <video id="localVideo" autoplay></video>
+        <video id="localVideo" autoplay></video>/mute all
         <video id="remoteVideo" autoplay></video>
     </div>
 
     <!--Librerias de JS necesarias-->
     <script src="/socket.io/socket.io.js"></script>
+
     <script src="client.js"></script>
 
+
 </body>
+
+</html>
