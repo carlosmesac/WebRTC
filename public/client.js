@@ -32,7 +32,7 @@ btnGoRoom.onclick = function() {
         roomNumber = inputRoomNumber.value; //obtenemos el valor del elemento
         socket.emit('create or join', roomNumber); //enviamos el mensaje al servidor
         divSelectRoom.style = "display:none;"; //ocultamos el input de la sala
-        divConsultingRoom = "display:block;"; //mostramos la conferencia
+        divConsultingRoom.style = "display:block;"; //mostramos la conferencia
     }
 }
 
